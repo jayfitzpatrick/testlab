@@ -78,7 +78,7 @@ sudo sysctl -w vm.max_map_count=262144
 
 echo "Generating self-signed SSL certificates for Wazuh"
 cd $workdir/Wazuh/wazuh-docker/single-node
-sudo docker compose -f generate-certs.yml run --rm generator
+sudo docker compose -f generate-indexer-certs.yml run --rm generator
 
 echo "Modify Wazuh configuration due to port conflict with TheHive"
 sudo sed -i 's/9200:9200/9201:9200/g' docker-compose.yml

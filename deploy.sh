@@ -109,11 +109,27 @@ else
     echo "SOC network already exists, skipping creation."
 fi
 
-echo "Connecting MISP, Cortex, TheHive, and Wazuh to SOC Network"
-sudo docker network connect soc $(sudo docker ps -qf "name=misp")
-sudo docker network connect soc $(sudo docker ps -qf "name=cortex")
-sudo docker network connect soc $(sudo docker ps -qf "name=thehive")
-sudo docker network connect soc $(sudo docker ps -qf "name=wazuh")
+echo "Connecting MISP, Cortex, TheHive, and Wazuh to SOC Network..."
+
+services=("misp" "cortex" "thehive" "wazuh")
+
+for svc in "${services[@]}"; do
+    container_ids=$(sudo docker ps -qf "name=$svc")
+    if [ -n "$container_ids" ]; then
+        for cid in $container_ids; do
+            # Check if container is already connected
+            if ! sudo docker network inspect soc | grep -q "$cid"; then
+                sudo docker network connect soc "$cid"
+                echo "Connected $svc ($cid) to SOC network."
+            else
+                echo "$svc ($cid) is already connected, skipping."
+            fi
+        done
+    else
+        echo "No running container found for $svc, skipping."
+    fi
+done
+
 echo "All components connected to SOC Network."
 
 
@@ -136,5 +152,27 @@ echo "TheHive: http://<your_server_ip>:9001"
 echo "Wazuh: https://<your_server_ip>:443"
 
 
+# Lists container names and IPs for containers attached to the SOC network.
+
+services=("misp" "cortex" "thehive" "wazuh")
+network="soc"
+
+echo "Listing container names and SOC network IPs:"
+
+for svc in "${services[@]}"; do
+    container_ids=$(sudo docker ps -qf "name=$svc")
+    if [ -n "$container_ids" ]; then
+        for cid in $container_ids; do
+            cname=$(sudo docker inspect -f '{{.Name}}' "$cid" | sed 's/^\/\+//')
+            
+            # Get IP for the network by name
+            ip=$(sudo docker inspect -f \
+                "{{with index .NetworkSettings.Networks \"$network\"}}{{.IPAddress}}{{end}}" \
+                "$cid")
+            
+            echo "$cname:$ip"
+        done
+    fi
+done
 
 

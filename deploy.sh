@@ -1,5 +1,6 @@
 #!/bin/sh
 echo "Starting deployment process..."
+set -euo pipefail
 
 echo "Creating Working Directory"
 mkdir ~/docker

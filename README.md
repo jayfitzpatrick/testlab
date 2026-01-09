@@ -22,3 +22,7 @@ sudo chmod 440 /etc/sudoers.d/ubuntu
 ``` 
 curl https://raw.githubusercontent.com/jayfitzpatrick/testlab/refs/heads/main/deploy.sh | bash - 
 ```
+
+
+
+### Please note, this shall take about 15 mins to run on a 4 core / 12GB RAM VM, and it will take some time for the newly created pods to settle

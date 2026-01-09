@@ -163,8 +163,8 @@ echo "You can access the services at the following URLs:"
 echo ""
 echo "MISP: http://${ipaddr}:8080/users/login"
 echo "TheHive: http://${ipaddr}:9000/login"     
-echo "Cortex: http://${ipaddr}:9001"
-echo "Wazuh: https://${ipaddr}:443 Username: admin| Password: SecretPassword"
+echo "Cortex: http://${ipaddr}:9001/index.html"
+echo "Wazuh: https://${ipaddr}:443/app/login? Username: admin| Password: SecretPassword"
 echo ""
 
 # Lists container names and IPs for containers attached to the SOC network.

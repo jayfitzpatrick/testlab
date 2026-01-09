@@ -100,8 +100,13 @@ echo "Wazuh Deployment process completed."
 
 
 
-echo "Creating SOC Network"
-sudo docker network create soc
+echo "Creating SOC Network..."
+
+if ! sudo docker network inspect soc >/dev/null 2>&1; then
+    sudo docker network create soc
+    echo "SOC network created."
+else
+    echo
 
 echo "Connecting MISP, Cortex, TheHive, and Wazuh to SOC Network"
 sudo docker network connect soc $(sudo docker ps -qf "name=misp")

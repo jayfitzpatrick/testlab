@@ -33,7 +33,7 @@ mkdir -p ${workdir}/MISP
 cd ${workdir}/MISP
 
 echo "Downloading the MISP docker-compose.yml file"
-wget -O docker-compose.ymlhttps://raw.githubusercontent.com/labs-practicals/SOC/refs/heads/main/MISP/docker-compose.yml
+wget -O docker-compose.yml https://raw.githubusercontent.com/labs-practicals/SOC/refs/heads/main/MISP/docker-compose.yml
 
 
 echo "Starting MISP services using Docker Compose"

@@ -80,8 +80,8 @@ echo "Generating self-signed SSL certificates for Wazuh"
 cd $workdir/Wazuh/wazuh-docker/single-node
 sudo docker compose -f generate-certs.yml run --rm generator
 
-echo "Modigy Wazuh configuration due to port conflict with TheHive"
-sudo sed -i 's/"9200:9200"/g' docker-compose.yml
+echo "Modify Wazuh configuration due to port conflict with TheHive"
+sudo sed -i 's/9200:9200/9201:9200/g' docker-compose.yml
 
 
 echo "Starting Wazuh services using Docker Compose"

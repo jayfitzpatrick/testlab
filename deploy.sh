@@ -3,7 +3,7 @@ echo "Starting deployment process..."
 
 echo "Creating Working Directory"
 mkdir ~/docker
-workdir=~/docker
+workdir=$HOME/docker
 cd $workdir || exit
 
 

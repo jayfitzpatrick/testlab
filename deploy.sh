@@ -13,7 +13,7 @@ sudo apt update && sudo apt upgrade -y
 echo "Installing Docker dependencies and adding Docker's official GPG key and repository"
 sudo apt install -y ca-certificates curl gnupg lsb-release
 sudo mkdir -p /etc/apt/keyrings
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg --yes
 
 echo "Setting up the Docker repository"
 sudo echo  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
@@ -21,6 +21,10 @@ sudo apt update
 
 echo "Installing Docker Engine and Docker Compose"
 sudo apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+
+echo "Enabling and starting Docker service"
+sudo systemctl enable docker
+sudo systemctl start docker 
 
 
 echo "Creating Working Directory for MISP"
@@ -97,6 +101,16 @@ sudo docker network connect soc $(sudo docker ps -qf "name=cortex")
 sudo docker network connect soc $(sudo docker ps -qf "name=thehive")
 sudo docker network connect soc $(sudo docker ps -qf "name=wazuh")
 echo "All components connected to SOC Network."
+
+
+echo "Adding Firewall Rules for Services"
+sudo ufw allow 8080/tcp    # MISP
+sudo ufw allow 9000/tcp    # Cortex
+sudo ufw allow 9001/tcp    # TheHive
+sudo ufw allow 443/tcp     # Wazuh
+sudo ufw reload
+echo "Firewall rules added."
+
 
 
 echo "Deployment process completed successfully."

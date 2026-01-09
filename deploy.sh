@@ -106,7 +106,8 @@ if ! sudo docker network inspect soc >/dev/null 2>&1; then
     sudo docker network create soc
     echo "SOC network created."
 else
-    echo
+    echo "SOC network already exists, skipping creation."
+fi
 
 echo "Connecting MISP, Cortex, TheHive, and Wazuh to SOC Network"
 sudo docker network connect soc $(sudo docker ps -qf "name=misp")

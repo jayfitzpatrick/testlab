@@ -149,8 +149,8 @@ echo "All components connected to SOC Network."
 
 echo "Adding Firewall Rules for Services"
 sudo ufw allow 8080/tcp    # MISP
-sudo ufw allow 9000/tcp    # Cortex
-sudo ufw allow 9001/tcp    # TheHive
+sudo ufw allow 9000/tcp    # TheHive
+sudo ufw allow 9001/tcp    # Cortex
 sudo ufw allow 443/tcp     # Wazuh
 sudo ufw reload
 echo "Firewall rules added."
@@ -160,10 +160,10 @@ echo "Firewall rules added."
 echo "Deployment process completed successfully."
 
 echo "You can access the services at the following URLs:"
-echo "MISP: http://<your_server_ip>:8080"
-echo "Cortex: http://<your_server_ip>:9000"     
-echo "TheHive: http://<your_server_ip>:9001"
-echo "Wazuh: https://<your_server_ip>:443"
+echo "MISP: http://<your_server_ip>:8080/users/login"
+echo "TheHive: http://<your_server_ip>:9000/login"     
+echo "Cortex: http://<your_server_ip>:9001"
+echo "Wazuh: https://<your_server_ip>:443 Username: admin| Password: SecretPassword"
 
 
 # Lists container names and IPs for containers attached to the SOC network.

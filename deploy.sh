@@ -112,17 +112,24 @@ fi
 echo "Connecting MISP, Cortex, TheHive, and Wazuh to SOC Network..."
 
 services=("misp" "cortex" "thehive" "wazuh")
+network="soc"
 
 for svc in "${services[@]}"; do
     container_ids=$(sudo docker ps -qf "name=$svc")
     if [ -n "$container_ids" ]; then
         for cid in $container_ids; do
-            # Check if container is already connected
-            if ! sudo docker network inspect soc | grep -q "$cid"; then
-                sudo docker network connect soc "$cid"
-                echo "Connected $svc ($cid) to SOC network."
+            # Human-readable container name
+            cname=$(sudo docker inspect -f '{{.Name}}' "$cid" | sed 's/^\/\+//')
+
+            # Check if container is already connected to the network
+            connected=$(sudo docker inspect -f \
+                '{{if .NetworkSettings.Networks.'$network'}}yes{{else}}no{{end}}' "$cid")
+
+            if [ "$connected" = "no" ]; then
+                sudo docker network connect "$network" "$cid"
+                echo "Connected $cname ($cid) to SOC network."
             else
-                echo "$svc ($cid) is already connected, skipping."
+                echo "$cname ($cid) is already connected, skipping."
             fi
         done
     else
@@ -131,6 +138,7 @@ for svc in "${services[@]}"; do
 done
 
 echo "All components connected to SOC Network."
+
 
 
 echo "Adding Firewall Rules for Services"

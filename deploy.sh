@@ -83,8 +83,9 @@ sudo sysctl -w vm.max_map_count=262144
 
 echo "Generating self-signed SSL certificates for Wazuh"
 cd $workdir/Wazuh/wazuh-docker/single-node
+ps -f $$  # shows the current shell
 sudo docker compose -f generate-indexer-certs.yml run --rm generator
-echo "Docker exit code: $?"
+ps -f $$  # if this line never prints, shell was replaced
 
 
 echo "Modify Wazuh configuration due to port conflict with TheHive"

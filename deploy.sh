@@ -4,7 +4,7 @@ set -euo pipefail
 
 echo "Creating Working Directory"
 workdir=$HOME/docker
-mkdir ${workdir} 2>/dev/null || true
+mkdir -p ${workdir} 
 cd $workdir || exit
 
 

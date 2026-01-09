@@ -3,8 +3,8 @@ echo "Starting deployment process..."
 set -euo pipefail
 
 echo "Creating Working Directory"
-mkdir ~/docker
 workdir=$HOME/docker
+mkdir ${workdir} 2>/dev/null || true
 cd $workdir || exit
 
 

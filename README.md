@@ -1,0 +1,1 @@
+This is a one click install for the 4 docker based apps and all required modifications to the OS to accomodate them

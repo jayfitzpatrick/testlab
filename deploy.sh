@@ -156,15 +156,16 @@ sudo ufw reload
 echo "Firewall rules added."
 
 
-
+echo ""
 echo "Deployment process completed successfully."
-
+echo ""
 echo "You can access the services at the following URLs:"
+echo ""
 echo "MISP: http://<your_server_ip>:8080/users/login"
 echo "TheHive: http://<your_server_ip>:9000/login"     
 echo "Cortex: http://<your_server_ip>:9001"
 echo "Wazuh: https://<your_server_ip>:443 Username: admin| Password: SecretPassword"
-
+echo ""
 
 # Lists container names and IPs for containers attached to the SOC network.
 

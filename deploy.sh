@@ -33,7 +33,7 @@ mkdir -p ${workdir}/MISP
 cd ${workdir}/MISP
 
 echo "Downloading the MISP docker-compose.yml file"
-wget https://raw.githubusercontent.com/labs-practicals/SOC/refs/heads/main/MISP/docker-compose.yml
+wget -O docker-compose.ymlhttps://raw.githubusercontent.com/labs-practicals/SOC/refs/heads/main/MISP/docker-compose.yml
 
 
 echo "Starting MISP services using Docker Compose"
@@ -47,7 +47,7 @@ mkdir -p ${workdir}/Cortex
 cd ${workdir}/Cortex
 
 echo "Downloading the Cortex docker-compose.yml file"
-wget https://raw.githubusercontent.com/labs-practicals/SOC/refs/heads/main/CORTEX/docker-compose.yml
+wget -O docker-compose.yml https://raw.githubusercontent.com/labs-practicals/SOC/refs/heads/main/CORTEX/docker-compose.yml
 
 echo "Starting Cortex services using Docker Compose"
 sudo docker compose up -d
@@ -59,7 +59,7 @@ echo "Creating Working Directory for TheHive"
 mkdir -p ${workdir}/TheHive
 cd ${workdir}/TheHive
 echo "Downloading TheHive docker-compose.yml file"
-wget https://raw.githubusercontent.com/labs-practicals/SOC/refs/heads/main/THEHIVE/docker-compose.yml
+wget -O docker-compose.yml https://raw.githubusercontent.com/labs-practicals/SOC/refs/heads/main/THEHIVE/docker-compose.yml
 
 echo "Starting TheHive services using Docker Compose"
 sudo docker compose up -d
@@ -71,7 +71,11 @@ echo "Creating Working Directory for Wazuh"
 mkdir -p ${workdir}/Wazuh
 cd ${workdir}/Wazuh
 echo "Downloading Wazuh docker Config"
-git clone https://github.com/wazuh/wazuh-docker.git -b v4.14.0 --single-branch
+if [ ! -d "wazuh-docker" ]; then
+    git clone https://github.com/wazuh/wazuh-docker.git -b v4.14.0 --single-branch
+else
+    echo "wazuh-docker directory already exists, skipping clone"
+fi
 
 echo "Increase "max_map_count" value for Wazuh"
 sudo sysctl -w vm.max_map_count=262144

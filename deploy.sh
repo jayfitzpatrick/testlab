@@ -40,7 +40,7 @@ sed -i "s#MISP_BASEURL: http://localhost:8080#MISP_BASEURL: http://${ipaddr}:808
 
 
 echo "Modifying MISP docker-compose.yml to bind to all interfaces"
-sed -i 's/127.0.0.1:8080:80/0.0.0.0:8080:80/g' docker-compose.yml
+sed -i 's/127.0.0.1:8080:80/8080:80/g' docker-compose.yml
 
 echo "Starting MISP services using Docker Compose"
 sudo docker compose up -d

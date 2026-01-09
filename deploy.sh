@@ -34,7 +34,7 @@ cd ${workdir}/MISP
 
 echo "Downloading the MISP docker-compose.yml file"
 wget -O docker-compose.yml https://raw.githubusercontent.com/labs-practicals/SOC/refs/heads/main/MISP/docker-compose.yml
-
+sed -i 's/127.0.0.1:8080:80/0.0.0.0:8080:80/g' docker-compose.yml
 
 echo "Starting MISP services using Docker Compose"
 sudo docker compose up -d

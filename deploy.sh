@@ -26,6 +26,7 @@ sudo apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
 echo "Creating Working Directory for MISP"
 mkdir -p ${workdir}/MISP
 cd ${workdir}/MISP
+
 echo "Downloading the MISP docker-compose.yml file"
 wget https://raw.githubusercontent.com/labs-practicals/SOC/refs/heads/main/MISP/docker-compose.yml
 
@@ -34,3 +35,78 @@ echo "Starting MISP services using Docker Compose"
 sudo docker compose up -d
 
 echo "Misp Deployment process completed."
+
+
+echo "Creating Working Directory for Cortex"
+mkdir -p ${workdir}/Cortex
+cd ${workdir}/Cortex
+
+echo "Downloading the Cortex docker-compose.yml file"
+wget https://raw.githubusercontent.com/labs-practicals/SOC/refs/heads/main/CORTEX/docker-compose.yml
+
+echo "Starting Cortex services using Docker Compose"
+sudo docker compose up -d
+
+echo "Cortex Deployment process completed."
+
+
+echo "Creating Working Directory for TheHive"
+mkdir -p ${workdir}/TheHive
+cd ${workdir}/TheHive
+echo "Downloading TheHive docker-compose.yml file"
+wget https://raw.githubusercontent.com/labs-practicals/SOC/refs/heads/main/THEHIVE/docker-compose.yml
+
+echo "Starting TheHive services using Docker Compose"
+sudo docker compose up -d
+
+echo "TheHive Deployment process completed."
+
+
+echo "Creating Working Directory for Wazuh"
+mkdir -p ${workdir}/Wazuh
+cd ${workdir}/Wazuh
+echo "Downloading Wazuh docker Config"
+git clone https://github.com/wazuh/wazuh-docker.git -b v4.14.0 --single-branch
+
+echo "Increase "max_map_count" value for Wazuh"
+sudo sysctl -w vm.max_map_count=262144
+
+
+echo "Generating self-signed SSL certificates for Wazuh"
+cd $workdir/Wazuh/wazuh-docker/single-node
+sudo docker compose -f generate-certs.yml run --rm generator
+
+echo "Modigy Wazuh configuration due to port conflict with TheHive"
+sudo sed -i 's/"9200:9200"/g' docker-compose.yml
+
+
+echo "Starting Wazuh services using Docker Compose"
+sudo docker compose up -d
+
+
+echo "Wazuh Deployment process completed."
+
+
+
+echo "Creating SOC Network"
+sudo docker network create soc
+
+echo "Connecting MISP, Cortex, TheHive, and Wazuh to SOC Network"
+sudo docker network connect soc $(sudo docker ps -qf "name=misp")
+sudo docker network connect soc $(sudo docker ps -qf "name=cortex")
+sudo docker network connect soc $(sudo docker ps -qf "name=thehive")
+sudo docker network connect soc $(sudo docker ps -qf "name=wazuh")
+echo "All components connected to SOC Network."
+
+
+echo "Deployment process completed successfully."
+
+echo "You can access the services at the following URLs:"
+echo "MISP: http://<your_server_ip>:8080"
+echo "Cortex: http://<your_server_ip>:9000"     
+echo "TheHive: http://<your_server_ip>:9001"
+echo "Wazuh: https://<your_server_ip>:443"
+
+
+
+
